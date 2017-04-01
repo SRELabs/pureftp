@@ -1,0 +1,176 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+
+
+{% block pagecss %}
+
+{% endblock %}
+
+
+<!-- 正文开始 -->
+{% block content %}
+    <div class="row">
+
+
+{#        <!-- 搜索 -->#}
+{#        <div class="col-xs-12">#}
+{#            <div class="widget-box">#}
+{#                <div class="widget-header widget-header-small">#}
+{#                    <h5 class="widget-title lighter">搜索</h5>#}
+{#                </div>#}
+{##}
+{#                <div class="widget-body">#}
+{#                    <div class="widget-main">#}
+{#                        <form class="form-search" name="form1" id="form1" method="get">#}
+{#                            <div class="row">#}
+{#                                <div class="col-sm-1">#}
+{#\                                    <a href="/server/l/list/" class="btn btn-primary ">刷新</a>#}
+{#                                </div>#}
+{#                                <div class="col-sm-2">#}
+{#                                    <div class="input-group m-b"><span class="input-group-btn">#}
+{#                                            <button class="btn btn-primary" type="button">用户名</button> </span>#}
+{#                                        <input type="text" class="form-control" value="" name="username">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="col-sm-2">#}
+{#                                    <div class="input-group m-b"><span class="input-group-btn">#}
+{#                                            <button class="btn btn-primary" type="button">类型</button> </span>#}
+{#                                        <input type="text" class="form-control" value="" name="content_type">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{##}
+{#                                <div class="col-xs-12 col-sm-4">#}
+{#                                    <div class="input-daterange input-group">#}
+{#                                        <span class="input-group-addon">时间段</span>#}
+{#                                        <input type="text" name="start" class="input-sm form-control">#}
+{#                                        <span class="input-group-addon">#}
+{#                                            <i class="fa fa-exchange"></i>#}
+{#                                        </span>#}
+{#                                        <input type="text" id="end" name="end" class="input-sm form-control">#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                                <div class="col-xs-12 col-sm-1">#}
+{#                                        <span class="input-group-btn">#}
+{#                                            <button class="btn btn-purple btn-sm" type="button" onclick="submit_form('form1')">#}
+{#                                                <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>#}
+{#                                                搜索#}
+{#                                            </button>#}
+{#                                        </span>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-xs-12"></div>#}
+
+        <!-- 发布历史记录 -->
+        <div class="col-xs-12">
+            <div class="">
+                <a href="/system/l/list/" class="btn btn-primary ">刷新</a>
+            </div>
+            <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th class="center">id</th>
+                    <th>操作时间</th>
+{#                    <th>object_id</th>#}
+                    <th>操作人</th>
+{#                    <th>action_flag</th>#}
+                    <th>应用</th>
+                    <th>详细日志</th>
+
+{#                    <th>操作</th>#}
+                </tr>
+                </thead>
+
+                <tbody>
+
+                <!-- 一条数据 -->
+                {% for d in data %}
+                    <tr>
+                        <td class="center">{{ d.id }}</td>
+                        <td>{{ d.action_time }} </td>
+{#                        <td>{{ d.object_id }}</td>#}
+                        <td>{{ d.object_repr }}</td>
+{#                        <td>{{ d.action_flag }}</td>#}
+                        <td>{{ d.content_type.app_label }}</td>
+                        <td>{{ d.change_message }}</td>
+
+{#                        <td>#}
+{#                          <a href="javascript:if(confirm('确认删除吗?')) window.location='/user/u/del/?uid={{ d.id }}'" class="btn btn-xs btn-danger"><i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>删除</a>                        #}
+{#                        </td>#}
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- ################分页:Begin###################### -->
+            <div align="center">
+                <ul class="pagination">
+                    <!-- 上一页 -->
+                    {% if data.has_previous %}
+                        <li>
+                            <a href="?page={{ data.previous_page_number }}&{{ args }}">
+                                <i class="ace-icon fa fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <a href="#">
+                                <i class="ace-icon fa fa-angle-double-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <!-- 分页 -->
+                    {% for pr in page_range %}
+                        {% ifequal pr data.number %}
+                            <li class="active">
+                                <a href="#">{{ pr }}</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="?page={{ pr }}&{{ args }}">{{ pr }}</a>
+                            </li>
+                        {% endifequal %}
+                    {% endfor %}
+
+                    <!-- 下一页 -->
+                    {% if data.has_next %}
+                        <li>
+                            <a href="?page={{ data.next_page_number }}&{{ args }}">
+                                <i class="ace-icon fa fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <a href="#">
+                                <i class="ace-icon fa fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- ################分页:End###################### -->
+
+
+        </div>
+        <!-- /.span -->
+    </div>
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+{% endblock %}
+
+
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+{% endblock %}
+

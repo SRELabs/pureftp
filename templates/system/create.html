@@ -1,0 +1,158 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+{% block pagecss %}
+    <link rel="stylesheet" href="{% static "css/bootstrap-duallistbox.css" %}"/>
+{% endblock %}
+
+<!-- 正文开始 -->
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form" id="form1" name="form1" method="post">
+                {% csrf_token %}
+                <!-- 用户名 -->
+                <div class="form-group">
+                    <label for="form-field-1" class="col-sm-1 control-label no-padding-right"> 用户名 </label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" value="" id="username" name="username">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 新密码1 -->
+                <div class="form-group">
+                    <label for="form-field-2" class="col-sm-1 control-label no-padding-right"> 密码 </label>
+
+                    <div class="col-sm-8">
+                        <input type="password" class="form-control" placeholder="" id="password"
+                               name="password">
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 姓 -->
+                <div class="form-group">
+                    <label for="form-field-2" class="col-sm-1 control-label no-padding-right"> 姓 </label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="" id="last_name"
+                               name="last_name" value="">
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 名 -->
+                <div class="form-group">
+                    <label for="form-field-2" class="col-sm-1 control-label no-padding-right"> 名 </label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="" id="first_name"
+                               name="first_name" value="">
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 邮箱 -->
+                <div class="form-group">
+                    <label for="form-field-2" class="col-sm-1 control-label no-padding-right"> E-mail </label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="" id="email"
+                               name="email" value="">
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+                <h5>组配置</h5>
+                <hr>
+                <!-- 组 -->
+                <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-top" for="duallist"> 组 </label>
+
+                    <div class="col-sm-8">
+                        <!-- #section:plugins/input.duallist -->
+                        <select multiple="true" size="5" name="group" class="demo2" id="group">
+                            {% for g in groups %}
+                                <option value="{{ g.id }}"> {{ g }}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- /section:plugins/input.duallist -->
+                        <div class="hr hr-16 hr-dotted"></div>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <h5>权限配置</h5>
+                <hr>
+                <!-- 用户权限 -->
+                <div class="form-group">
+                    <label class="col-sm-1 control-label no-padding-top" for="duallist"> 权限 </label>
+
+                    <div class="col-sm-8">
+                        <!-- #section:plugins/input.duallist -->
+                        <select multiple="true" size="10" name="permission" class="demo2" id="permission">
+                            {% for p in perms %}
+                                <option value="{{ p.id }}"> {{ p }}</option>
+                            {% endfor %}
+                        </select>
+                        <!-- /section:plugins/input.duallist -->
+                        <div class="hr hr-16 hr-dotted"></div>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 提交表单 -->
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-4 col-md-8">
+                        <button class="btn btn-info" type="button" onclick="submit_form('form1')">
+                            <i class="ace-icon glyphicon glyphicon-plus bigger-110"></i>
+                            创建
+                        </button>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <a class="btn btn-danger" href="/system/u/list/">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            返回
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <!-- /.span -->
+    </div>
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+    <script src="{% static "js/jquery.bootstrap-duallistbox.js" %}"></script>
+{% endblock %}
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+    <script>
+        jQuery(function ($) {
+            var demo2 = $('.demo2').bootstrapDualListbox({
+                nonSelectedListLabel: 'Non-selected',
+                selectedListLabel: 'Selected',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false,
+                nonSelectedFilter: ''
+            });
+        });
+    </script>
+{% endblock %}
+

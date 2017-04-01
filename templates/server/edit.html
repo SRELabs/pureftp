@@ -1,0 +1,197 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+{% block pagecss %}
+    <link rel="stylesheet" href="{% static "css/plugins/chosen/chosen.css" %}"/>
+{% endblock %}
+
+<!-- 正文开始 -->
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <form class="form-horizontal" role="form"  method="post" id="form1">
+                {% csrf_token %}
+                <!-- 服务器ID -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">ID：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_id" name="server_id" placeholder="" class="form-control" value="{{ data.server_id }}" readonly>
+                    </div>
+                </div>
+
+                <!-- 服务器名称 -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"> 主机名：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_name" name="server_name" placeholder="" class="form-control" value="{{ data.server_name }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- IP -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">内网IP：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_ip" name="server_ip" placeholder="" class="form-control" value="{{ data.server_ip }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- WAN IP -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">公网IP：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_internetip" name="server_internetip" placeholder="" class="form-control" value="{{ data.server_internetip }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- CPU -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">CPU(核)：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_cpuinfo" name="server_cpuinfo" placeholder="" class="form-control" value="{{ data.server_cpuinfo }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- mem -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">内存(单位G)：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_memoryinfo" name="server_memoryinfo" placeholder="" class="form-control" value="{{ data.server_memoryinfo }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- disk -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">硬盘(单位G)：</label>
+
+                    <div class="col-sm-5">
+                        <input type="text" id="server_diskinfo" name="server_diskinfo" placeholder="" class="form-control" value="{{ data.server_diskinfo }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+{#                <!-- network -->#}
+{#                <div class="form-group">#}
+{#                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 网卡 </label>#}
+{##}
+{#                    <div class="col-sm-9">#}
+{#                        <input type="text" id="server_interfaceinfo" name="server_interfaceinfo" placeholder="" class="col-xs-10 col-sm-5" value="{{ data.server_interfaceinfo }}">#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="space-4"></div>#}
+
+                <!-- 机房位置 -->
+                <div class="form-group">
+                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right">
+                        机房位置</label>
+
+                    <div class="col-sm-5">
+                        <select name="server_location_id" id="server_location_id" class="form-control chosen-select">
+{#                            <option value="">请选择机房</option>#}
+                            <option value="{{ data.server_location.id }}">{{ data.server_location.name }}</option>
+                            {% for p in location_list %}
+                                {% if p.id != data.server_location.id %}
+                                    <option value="{{ p.id }}">{{ p.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 用户列表 -->
+                <div class="form-group">
+                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right">
+                        分配给</label>
+
+                    <div class="col-sm-5">
+                        <select name="server_uid" id="server_uid" class="form-control chosen-select">
+                            <option value="{{ data.server_uid.id }}">{{ data.server_uid.username }}|{{ data.server_uid.last_name }}{{ data.server_uid.first_name }}</option>
+                            {% for u in users %}
+                                {% if u.id != data.server_uid.id %}
+                                <option value="{{ u.id }}">{{ u.username }}|{{ u.last_name }}{{ u.first_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 是否可分配 -->
+                <div class="form-group">
+                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right">
+                        是否可分配</label>
+
+                    <div class="col-sm-5">
+                        <select name="server_assign_status" id="server_assign_status" class="form-control chosen-select">
+                                {% if server_assign_status == 0 %}
+                                    <option value="0">不可分配</option>
+                                    <option value="1">可分配</option>
+                                {% else %}
+                                    <option value="1">可分配</option>
+                                    <option value="0">不可分配</option>
+                                {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- 服务器描述 -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 服务器描述 </label>
+
+                    <div class="col-sm-6">
+                        <textarea rows="6" class="form-control" name="server_description" id="server_description" placeholder="">{{ data.server_description }}</textarea></div>
+                </div>
+                <div class="space-4"></div>
+
+
+                <!-- 提交表单 -->
+
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn btn-info" type="button" onclick="create_project()">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            修改
+                        </button>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <a class="btn btn-danger" href="/server/s/list/">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            返回
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <!-- /.span -->
+    </div>
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+    <script src="{% static "js/plugins/chosen/chosen.jquery.js" %}"></script>
+    <script src="{% static "js/demo/form-advanced-demo.min.js" %}"></script>
+{% endblock %}
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+    <script type="text/javascript">
+
+        function create_project() {
+            document.getElementById("form1").submit();
+        }
+
+    </script>
+{% endblock %}
+

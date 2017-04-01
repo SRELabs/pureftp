@@ -1,0 +1,86 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+
+{% block pagecss %}
+    <link rel="stylesheet" href="{% static "assets/css/jquery-ui.css" %}"/>
+{% endblock %}
+
+<!-- 正文开始 -->
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="">
+                <a href="/pureftp/s/add/" class="btn btn-xs btn-success ">添加机器</a>
+                <a href="/pureftp/s/list/" class="btn btn-xs btn-success ">刷新</a>
+            </div>
+            <table class="table table-striped table-bordered table-hover dataTables-example" id="">
+                <thead>
+                <tr>
+                    <th class="center">ID</th>
+                    <th>名称</th>
+                    <th>IP</th>
+                    <th>端口</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 一条数据 -->
+                {% for d in data %}
+                    <tr>
+                        <td class="center">{{ d.id }}</td>
+                        <td>{{ d.ftp_name }}</td>
+                        <td>{{ d.server.server_ip }}</td>
+                        <td>{{ d.ftp_port }}</td>
+                        <td><span class="label label-sm label-info">未定义</span></td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                        aria-expanded="false">操作 <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/pureftp/s/edit/?id={{ d.id }}" id="id-btn-dialog20">
+                                        <i class="ace-icon glyphicon glyphicon-edit bigger-120"></i>
+                                        编辑
+                                    </a></li>
+                                    <li><a href="javascript:"
+                                           onclick="disp_confirm('确定要删除吗？','/pureftp/s/del/?id={{ d.id }}')"
+                                           id="id-btn-dialog2">
+                                        <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                        删除
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <!-- /.span -->
+    </div>
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+{% endblock %}
+
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+    <script>
+        $(document).ready(function () {
+            $(".dataTables-example").dataTable();
+            var oTable = $("#editable").dataTable();
+            oTable.$("td").editable("#", {
+                "callback": function (sValue, y) {
+                    var aPos = oTable.fnGetPosition(this);
+                    oTable.fnUpdate(sValue, aPos[0], aPos[1])
+                }, "submitdata": function (value, settings) {
+                    return {"row_id": this.parentNode.getAttribute("id"), "column": oTable.fnGetPosition(this)[2]}
+                }, "width": "90%", "height": "100%"
+            })
+        });
+    </script>
+{% endblock %}
+

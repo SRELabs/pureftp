@@ -1,0 +1,102 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>PureFTP管理系统|Archer运维平台</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="{% static "css/bootstrap.min14ed.css" %}" rel="stylesheet">
+    <link href="{% static "css/font-awesome.min93e3.css" %}" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="{% static "css/plugins/dataTables/dataTables.bootstrap.css" %}" rel="stylesheet">
+
+    <link href="{% static "css/animate.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.min862f.css" %}" rel="stylesheet">
+    <!-- 弹出提示框 -->
+    <link href="{% static "css/plugins/toastr/toastr.min.css" %}" rel="stylesheet">
+
+    <link href="{% static "css/plugins/sweetalert/sweetalert.css"  %}"rel="stylesheet">
+
+    <link href="{% static "css/animate.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+    {% block pagecss %}
+    {% endblock %}
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本
+                        <small>分类，查找</small>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static "js/jquery.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/plugins/jeditable/jquery.jeditable.js" %}"></script>
+<script src="{% static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{% static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "js/content.min.js" %}"></script>
+<script src="{% static "js/nb_tools.js" %}"></script>
+<script src="{% static "js/Chart.js" %}"></script>
+<!-- 弹出提示框 -->
+<script src="{% static "js/plugins/toastr/toastr.min.js" %}"></script>
+
+
+<!-- link js文件 -->
+{% block deletscripts %}
+{% endblock %}
+{% block pagescripts %}
+{% endblock %}
+
+<!-- 内嵌js内容 -->
+{% block inline %}
+{% endblock %}
+
+
+<!-- 弹出提示框选项 -->
+<script type="text/javascript">
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "7000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    {% if messages %}
+        {% for message in messages %}
+            toastr.{{ message.tags }}("{{ message }}")
+        {% endfor %}
+    {% endif %}
+
+</script>
+</body>
+</html>

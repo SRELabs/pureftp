@@ -1,0 +1,108 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+
+{% block pagecss %}
+    <link rel="stylesheet" href="{% static "css/plugins/chosen/chosen.css" %}"/>
+{% endblock %}
+
+
+<!-- 正文开始 -->
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            {% if msg %}
+                <div class="alert alert-warning">
+                    <button data-dismiss="alert" class="close" type="button">
+                        <i class="ace-icon fa fa-times"></i>
+                    </button>
+                    <strong></strong>
+                    {{ msg }}
+                    <br>
+                </div>
+            {% endif %}
+            <form class="form-horizontal" role="form" id="form1" name="form1" method="post">
+                {% csrf_token %}
+                <!-- CodeName -->
+                <div class="form-group">
+                    <label for="form-field-1" class="col-sm-3 control-label"> CodeName </label>
+
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="codename" name="codename" value="{{ data.codename }}" readonly>
+                        <input type="hidden" class="form-control" id="id" name="id" value="{{ data.id }}">
+                        <input type="hidden" class="form-control" id="page" name="page" value="{{ page }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+                <!-- ContentType -->
+                <div class="form-group">
+                    <label class="col-sm-3 control-label no-padding-right">
+                        Model(Content_type_id)</label>
+
+                    <div class="col-sm-5">
+                        <select name="content_type_id" id="content_type_id" class="chosen-select col-sm-12">
+                            <option value="{{ data.content_type.id }}" selected>{{ data.content_type.app_label }}</option>
+                            {% for c in content_type_list %}
+                                <option value="{{ c.id }}">{{ c.model }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+{##}
+{#                <!-- ContentType -->#}
+{#                <div class="form-group">#}
+{#                    <label for="form-field-2" class="col-sm-3 control-label no-padding-right"> 模块 </label>#}
+{##}
+{#                    <div class="col-sm-5">#}
+{#                        <input type="text" class="form-control" placeholder="" id="content_type"#}
+{#                               name="content_type" value="{{ data.content_type.app_label }}">#}
+{#											<span class="help-inline col-xs-12 col-sm-7">#}
+{#												<span class="middle"></span>#}
+{#											</span>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="space-4"></div>#}
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="form-field-1" class="col-sm-3 control-label no-padding-right"> CodeName </label>
+
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" id="name" name="name" value="{{ data.name }}">
+                    </div>
+                </div>
+                <div class="space-4"></div>
+
+
+                <!-- 提交表单 -->
+                <div class="clearfix form-actions">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button class="btn btn-info" type="button" onclick="submit_form('form1')">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            修改
+                        </button>
+
+                        &nbsp; &nbsp; &nbsp;
+                        <a class="btn btn-warning" href="/system/p/list/">
+                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                            返回列表
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <!-- /.span -->
+    </div>
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+    <script src="{% static "js/plugins/chosen/chosen.jquery.js" %}"></script>
+    <script src="{% static "js/demo/form-advanced-demo.min.js" %}"></script>
+{% endblock %}
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+{% endblock %}
+
