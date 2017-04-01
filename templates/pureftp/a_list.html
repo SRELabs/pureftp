@@ -1,0 +1,158 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+{% block pagecss %}
+{% endblock %}
+
+<!-- 正文开始 -->
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="">
+                <a href="/pureftp/a/add/" class="btn btn-xs btn-success ">添加账户</a>
+                <a href="/pureftp/a/list/" class="btn btn-xs btn-success ">刷新</a>
+            </div>
+            <table class="table table-striped table-bordered table-hover dataTables-example" id="">
+                <thead>
+                <tr>
+                    <th class="center">ID</th>
+                    <th>用户</th>
+                    <th>密码</th>
+                    {#                    <th>Uid</th>#}
+                    {#                    <th>Gid</th>#}
+                    <th>目录</th>
+                    <th>上行</th>
+                    <th>下行</th>
+                    <th>访问控制</th>
+                    <th>容量限额</th>
+                    <th>文件限额</th>
+                    <th>服务器列表</th>
+                    <th>所有者</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 一条数据 -->
+                {% for d in data %}
+                    <tr>
+                        <td class="center">{{ d.id }}</td>
+                        <td>{{ d.User }}</td>
+                        <td>{{ d.Password }}</td>
+                        {#                        <td>{{ d.Uid }}</td>#}
+                        {#                        <td>{{ d.Gid }}</td>#}
+                        <td>{{ d.Dir }}</td>
+                        <td>{{ d.ULBandwidth }}</td>
+                        <td>{{ d.DLBandwidth }}</td>
+                        <td>{{ d.ipaccess }}</td>
+                        <td>{{ d.QuotaSize }}</td>
+                        <td>{{ d.QuotaFiles }}</td>
+                        <td>
+                            {% for s in d.ftp_server.all %}
+                                {{ s.server.server_ip }} | {{ s.ftp_name }}
+                                <br>
+                            {% endfor %}
+                        </td>
+                        <td>{{ d.user_id.last_name }}{{ d.user_id.first_name }}</td>
+                        <td><span class="label label-sm label-info">激活</span></td>
+
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                        aria-expanded="false">操作 <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    {% if user.is_superuser or perms.pub.change_polls or perms.pub.delete_polls %}
+                                        <li><a href="/pureftp/a/edit/?id={{ d.id }}" id="id-btn-dialog20">
+                                            <i class="ace-icon glyphicon glyphicon-edit bigger-120"></i>
+                                            编辑
+                                        </a></li>
+                                    {% endif %}
+                                    {% if user.is_superuser or perms.pub.change_polls or perms.pub.delete_polls %}
+                                        <li><a href="javascript:"
+                                               onclick="disp_confirm('确定要删除吗？','/pureftp/a/del/?id={{ d.id }}')"
+                                               id="id-btn-dialog2">
+                                            <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>
+                                            删除
+                                        </a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- ################分页:Begin###################### -->
+            {#            <div align="center">#}
+            {#                <ul class="pagination">#}
+            {#                    <!-- 上一页 -->#}
+            {#                    {% if page_range.has_previous %}#}
+            {#                        <li>#}
+            {#                            <a href="?page={{ page_range.previous_page_number }}">#}
+            {#                                <i class="ace-icon fa fa-angle-double-left"></i>#}
+            {#                            </a>#}
+            {#                        </li>#}
+            {#                    {% else %}#}
+            {#                        <li class="disabled">#}
+            {#                            <a href="#">#}
+            {#                                <i class="ace-icon fa fa-angle-double-left"></i>#}
+            {#                            </a>#}
+            {#                        </li>#}
+            {#                    {% endif %}#}
+            {#                    <!-- 分页 -->#}
+            {#                    {% for pr in page_range %}#}
+            {#                        {% ifequal pr page_range.number %}#}
+            {#                            <li class="active">#}
+            {#                                <a href="#">{{ pr }}</a>#}
+            {#                            </li>#}
+            {#                        {% else %}#}
+            {#                            <li>#}
+            {#                                <a href="?page={{ pr }}">{{ pr }}</a>#}
+            {#                            </li>#}
+            {#                        {% endifequal %}#}
+            {#                    {% endfor %}#}
+            {##}
+            {#                    <!-- 下一页 -->#}
+            {#                    {% if page_range.has_next %}#}
+            {#                        <li>#}
+            {#                            <a href="?page={{ page_range.next_page_number }}">#}
+            {#                                <i class="ace-icon fa fa-angle-double-right"></i>#}
+            {#                            </a>#}
+            {#                        </li>#}
+            {#                    {% else %}#}
+            {#                        <li class="disabled">#}
+            {#                            <a href="#">#}
+            {#                                <i class="ace-icon fa fa-angle-double-right"></i>#}
+            {#                            </a>#}
+            {#                        </li>#}
+            {#                    {% endif %}#}
+            {#                </ul>#}
+            {#            </div>#}
+            <!-- ################分页:End###################### -->
+        </div>
+        <!-- /.span -->
+    </div>
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+{% endblock %}
+
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+    <script>
+        $(document).ready(function () {
+            $(".dataTables-example").dataTable();
+            var oTable = $("#editable").dataTable();
+            oTable.$("td").editable("#", {
+                "callback": function (sValue, y) {
+                    var aPos = oTable.fnGetPosition(this);
+                    oTable.fnUpdate(sValue, aPos[0], aPos[1])
+                }, "submitdata": function (value, settings) {
+                    return {"row_id": this.parentNode.getAttribute("id"), "column": oTable.fnGetPosition(this)[2]}
+                }, "width": "90%", "height": "100%"
+            })
+        });
+    </script>
+{% endblock %}

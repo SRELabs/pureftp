@@ -12,10 +12,3 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.id
 
-
-class SystemConfig(models.Model):
-    name = models.CharField(max_length=50)  # 配置文件名称
-    value = models.CharField(max_length=4096)  # 配置值
-
-    def __str__(self):
-        return self.id

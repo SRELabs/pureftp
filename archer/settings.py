@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '0v&uz!0uk-*5meuhwy4-$u9zb3txxl0fh+lf_@3k%4@enb9e2('
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,7 +42,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'server',
     'pureftp',
-    'system'
+    'system',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'library.archer_cas.archer_backend.ArcherBackend',
+    'django.contrib.auth.backends.ModelBackend'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -79,11 +85,14 @@ WSGI_APPLICATION = 'archer.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'data/archer.db',
+    },'default1': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'newbee',
-        'USER': 'newbee',
+        'NAME': 'archer_pureftp',
+        'USER': 'archer',
         'PASSWORD': 'gT9oVeOORh5Z',
-        'HOST': 'db.op.archer.com',
+        'HOST': 'db.op.archer.xin',
         'PORT': '58111',
     }
 }
@@ -100,11 +109,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-    BASE_DIR + "/static/",
-)
+STATIC_URL = 'http://static.archer.xin/'
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, "static/hplus"),
+#     BASE_DIR + "/static/hplus/",
+# )
 
 LOGGING = {
     'version': 1,

@@ -87,3 +87,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+conf/archer.conf
+*.db
+archer.db

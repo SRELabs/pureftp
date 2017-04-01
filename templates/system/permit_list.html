@@ -1,0 +1,89 @@
+{% extends 'home/base_1.html' %}
+{% load staticfiles %}
+
+
+{% block pagecss %}
+{% endblock %}
+
+
+<!-- 正文开始 -->
+{% block content %}
+    <!-- 搜索 -->
+    <div class="row">
+
+        <!-- 发布历史记录 -->
+        <div class="col-xs-12">
+            <div class="">
+                <a class="btn btn-xs btn-warning " href="/system/p/add/">添加</a>
+                <a class="btn btn-xs btn-success " href="/system/p/list/">刷新</a>
+            </div>
+            <table id="sample-table-1" class="table table-striped table-bordered table-hover dataTables-example">
+                <thead>
+                <tr>
+                    <th class="center">ID</th>
+                    <th>CodeName</th>
+                    <th>ContentType</th>
+                    <th>Name</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <!-- 一条数据 -->
+                {% for d in data %}
+                    <tr>
+                        <td class="center">{{ d.id }}</td>
+                        <td>{{ d.codename }} </td>
+                        <td>{{ d.content_type.app_label }}</td>
+                        <td>{{ d.name }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                        aria-expanded="false">操作 <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/system/p/edit/?id={{ d.id }}&page={{ data.number }}"
+                                           id="id-btn-dialog20">
+                                        <i class="ace-icon glyphicon glyphicon-edit bigger-120"></i>
+                                        编辑
+                                    </a></li>
+                                    <li>
+                                        <a href="javascript:if(confirm('确认删除吗?')) window.location='/system/p/del/?pid={{ d.id }}'"
+                                           id="id-btn-dialog2">
+                                            <i class="ace-icon glyphicon glyphicon-trash bigger-120"></i>删除
+                                        </a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /.span -->
+{% endblock %}
+
+<!-- 当前页面需要引入的js-->
+{% block pagescripts %}
+{% endblock %}
+
+
+<!-- 当前页面需要执行的脚本 -->
+{% block inline %}
+    <script>
+        $(document).ready(function () {
+            $(".dataTables-example").dataTable();
+            var oTable = $("#editable").dataTable();
+            oTable.$("td").editable("#", {
+                "callback": function (sValue, y) {
+                    var aPos = oTable.fnGetPosition(this);
+                    oTable.fnUpdate(sValue, aPos[0], aPos[1])
+                }, "submitdata": function (value, settings) {
+                    return {"row_id": this.parentNode.getAttribute("id"), "column": oTable.fnGetPosition(this)[2]}
+                }, "width": "90%", "height": "100%"
+            })
+        });
+    </script>
+{% endblock %}
+
+
